@@ -4,7 +4,7 @@
   "description": "Calculate the Swarm hash of data blobs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
   "homepage": "https://github.com/axic/swarmhash#readme",
   "dependencies": {
     "keccakjs": "^0.2.1"
+  },
+  "devDependencies": {
+    "tape": "^4.6.3"
   }
 }
