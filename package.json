@@ -1,0 +1,27 @@
+{
+  "name": "swarmhash",
+  "version": "0.0.0",
+  "description": "Calculate the Swarm hash of data blobs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/axic/swarmhash.git"
+  },
+  "keywords": [
+    "ethereum",
+    "swarm",
+    "hash"
+  ],
+  "author": "Alex Beregszaszi <alex@rtfs.hu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/axic/swarmhash/issues"
+  },
+  "homepage": "https://github.com/axic/swarmhash#readme",
+  "dependencies": {
+    "keccakjs": "^0.2.1"
+  }
+}
