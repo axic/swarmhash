@@ -1,5 +1,7 @@
 # swarmhash
 
+[![Build Status](https://img.shields.io/travis/axic/swarmhash.svg?branch=master&style=flat-square)](https://travis-ci.org/axic/swarmhash)
+
 This library can be used to calculate Ethereum Swarm hashes of data blobs.
 
 ## Usage
