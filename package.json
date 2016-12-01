@@ -4,6 +4,8 @@
   "description": "Calculate the Swarm hash of data blobs.",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
+    "prepublish": "npm run lint && npm run test",
     "test": "node test/index.js"
   },
   "repository": {
@@ -25,6 +27,7 @@
     "keccakjs": "^0.2.1"
   },
   "devDependencies": {
+    "standard": "^8.6.0",
     "tape": "^4.6.3"
   }
 }
