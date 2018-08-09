@@ -12,7 +12,7 @@ Example:
 ```js
 const swarmhash = require('swarmhash')
 
-swarmhash(new Buffer('Hello World')).toString('hex') // d85117d40c1b74239bf0b0c4f8201e2be7d85c36efbbddc77fb9b58ed3964287
+swarmhash(Buffer.from('Hello World')).toString('hex') // d85117d40c1b74239bf0b0c4f8201e2be7d85c36efbbddc77fb9b58ed3964287
 ```
 
 ## License

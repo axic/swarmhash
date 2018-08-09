@@ -1,3 +1,4 @@
+const Buffer = require('safe-buffer').Buffer
 const Keccak = require('keccakjs')
 
 // NOTE: it only supports 48 bit lengths
@@ -7,7 +8,7 @@ function swarmHashBlock (data, totalLength) {
   tmp.writeUIntLE(totalLength, 0, 6)
   hash.update(tmp)
   hash.update(data)
-  return new Buffer(hash.digest('bin'), 'binary')
+  return Buffer.from(hash.digest('bin'), 'binary')
 }
 
 function swarmHash (data) {

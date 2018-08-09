@@ -1,3 +1,4 @@
+const Buffer = require('safe-buffer').Buffer
 const tape = require('tape')
 const swarmhash = require('../index.js')
 

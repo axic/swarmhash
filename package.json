@@ -24,7 +24,8 @@
   },
   "homepage": "https://github.com/axic/swarmhash#readme",
   "dependencies": {
-    "keccakjs": "^0.2.1"
+    "keccakjs": "^0.2.1",
+    "safe-buffer": "^5.1.2"
   },
   "devDependencies": {
     "standard": "^8.6.0",
