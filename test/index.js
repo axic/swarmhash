@@ -1,6 +1,6 @@
 const Buffer = require('safe-buffer').Buffer
 const tape = require('tape')
-const swarmhash = require('../index.js')
+const swarmhash = require('../index.js')({ mode: 'poc2' })
 
 const blobs = [
   [ 0, '011b4d03dd8c01f1049143cf9c4c817e4b167f1d1b83e5c6f0f10d89ba1e7bce' ],

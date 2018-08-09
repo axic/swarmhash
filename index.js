@@ -31,4 +31,15 @@ function swarmHash (data) {
   return swarmHashBlock(Buffer.concat(innerNodes), length)
 }
 
-module.exports = swarmHash
+function pyramidHash (data) {
+  return Buffer.from(0)
+}
+
+module.exports = function (opts) {
+  opts = opts || {}
+  if (opts.mode === 'poc2') {
+    return swarmHash
+  } else {
+    return pyramidHash
+  }
+}
