@@ -32,6 +32,7 @@ function swarmHash (data) {
 }
 
 function pyramidHash (data) {
+  throw new Error('not implemented')
   return Buffer.from(0)
 }
 
@@ -40,6 +41,7 @@ module.exports = function (opts) {
   if (opts.mode === 'poc2') {
     return swarmHash
   } else {
+    assert(opts.mode === 'poc3')
     return pyramidHash
   }
 }
