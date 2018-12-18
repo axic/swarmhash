@@ -9,7 +9,7 @@ function swarmHashBlock (data, totalLength) {
   tmp.writeUIntLE(totalLength, 0, 6)
   hash.update(tmp)
   hash.update(data)
-  return pyramidHash(Buffer.concat([ tmp, data ]))
+  return bmtHash(Buffer.concat([ tmp, data ]))
 //  return Buffer.from(hash.digest('bin'), 'binary')
 }
 
@@ -34,7 +34,7 @@ function swarmHash (data) {
 }
 
 // Assumes `data` is a Buffer.
-function pyramidHashSection (data, sectionLength) {
+function bmtHashSection (data, sectionLength) {
 //  assert(data.length !== 0)
   console.log('Running hashSection', data.length, sectionLength, data)
 
@@ -47,8 +47,8 @@ function pyramidHashSection (data, sectionLength) {
     const right = data.slice(length)
     console.log(left.length, right.length)
     section = Buffer.concat([
-      pyramidHashSection(left, sectionLength),
-      pyramidHashSection(right, sectionLength)
+      bmtHashSection(left, sectionLength),
+      bmtHashSection(right, sectionLength)
     ])
   }
   console.log('Section', section.length, section)
@@ -59,7 +59,7 @@ function pyramidHashSection (data, sectionLength) {
 }
 
 // NOTE: this is currently hardcoded to use keccak256
-function pyramidHash (data) {
+function bmtHash (data) {
   // Set up hashing parameters.
   const chunkSize = 32 //4096
   const hashSize = 32 // 256-bit
@@ -88,7 +88,7 @@ function pyramidHash (data) {
   
   console.log(data.length)
 
-  return pyramidHashSection(data, sectionLength)
+  return bmtHashSection(data, sectionLength)
 }
 
 module.exports = function (opts) {
@@ -97,11 +97,11 @@ module.exports = function (opts) {
     return swarmHash
   } else {
     assert(opts.mode === 'poc3')
-    return pyramidHash
+    return bmtHash
   }
 }
 
 // Swarm hash: 09ae927d0f3aaa37324df178928d3826820f3dd3388ce4aaebfc3af410bde23a
-console.log('pyramid', pyramidHash(Buffer.alloc(4096)).toString('hex'))
+console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
 // Swarm hash: 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
-//console.log('pyramid', pyramidHash(Buffer.from('hello world')).toString('hex'))
+//console.log('pyramid', bmtHash(Buffer.from('hello world')).toString('hex'))
