@@ -40,18 +40,23 @@ function keccak256Buffer (data) {
 
 // Assumes `data` is a Buffer.
 function pyramidHashSection (data, sectionLength) {
+  assert(data.length !== 0)
+  console.log('Running hashsection', data.length, sectionLength, data)
+
   var section
   if (data.length === sectionLength) {
     section = data
   } else {
     const length = data.length / 2
+    const left = data.slice(0, length)
+    const right = data.slice(length)
+    console.log(left.length, right.length)
     section = Buffer.concat([
-      pyramidHashSection(data.slice(0, length), length),
-      pyramidHashSection(data.slice(length), length)
+      pyramidHashSection(left, sectionLength),
+      pyramidHashSection(right, sectionLength)
     ])
-//    section = Buffer.concat([ keccak256Buffer(data.slice(0, length)), keccak256Buffer(data.slice(length)) ])
   }
-  console.log(section)
+  console.log('Section', section.length, section)
 
   var hash = new Keccak(256)
   hash.update(section)
@@ -82,7 +87,7 @@ function pyramidHash (data) {
   
   console.log(data.length)
 
-  return pyramidHashSection(data, maxDataLength)
+  return pyramidHashSection(data, sectionLength)
 }
 
 module.exports = function (opts) {
@@ -94,3 +99,6 @@ module.exports = function (opts) {
     return pyramidHash
   }
 }
+
+
+console.log('pyramid', pyramidHash(Buffer.alloc(4096)).toString('hex'))
