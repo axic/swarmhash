@@ -9,7 +9,8 @@ function swarmHashBlock (data, totalLength) {
   tmp.writeUIntLE(totalLength, 0, 6)
   hash.update(tmp)
   hash.update(data)
-  return Buffer.from(hash.digest('bin'), 'binary')
+  return pyramidHash(Buffer.concat([ tmp, data ]))
+//  return Buffer.from(hash.digest('bin'), 'binary')
 }
 
 function swarmHash (data) {
@@ -32,16 +33,10 @@ function swarmHash (data) {
   return swarmHashBlock(Buffer.concat(innerNodes), length)
 }
 
-function keccak256Buffer (data) {
-  var hash = new Keccak(256)
-  hash.update(data)
-  return Buffer.from(hash.digest('bin'), 'binary')
-}
-
 // Assumes `data` is a Buffer.
 function pyramidHashSection (data, sectionLength) {
-  assert(data.length !== 0)
-  console.log('Running hashsection', data.length, sectionLength, data)
+//  assert(data.length !== 0)
+  console.log('Running hashSection', data.length, sectionLength, data)
 
   var section
   if (data.length === sectionLength) {
@@ -65,15 +60,16 @@ function pyramidHashSection (data, sectionLength) {
 
 // NOTE: this is currently hardcoded to use keccak256
 function pyramidHash (data) {
-  const chunkSize = 4096
-  const hashSize = 32
+  // Set up hashing parameters.
+  const chunkSize = 32 //4096
+  const hashSize = 32 // 256-bit
+  const segmentCount = Math.ceil(chunkSize / hashSize)
   const sectionLength = 2 * hashSize
   var maxDataLength = 2
-  const segmentCount = Math.ceil(chunkSize / hashSize)
   while (maxDataLength < segmentCount) maxDataLength *= 2
   maxDataLength *= hashSize
 
-  console.log(chunkSize, segmentCount, hashSize, sectionLength, maxDataLength)
+  console.log('chunkSize', chunkSize, 'segmentCount', segmentCount, 'hashSize', hashSize, 'sectionLength', sectionLength, 'maxDataLength', maxDataLength)
 
   assert(Buffer.isBuffer(data))
 
@@ -84,6 +80,11 @@ function pyramidHash (data) {
       Buffer.alloc(maxDataLength - data.length)
     ])
   }
+
+  if (data.length > maxDataLength) {
+    console.log('Should truncate input...')
+    data = data.slice(0, maxDataLength)
+  }
   
   console.log(data.length)
 
@@ -91,7 +92,7 @@ function pyramidHash (data) {
 }
 
 module.exports = function (opts) {
-  opts = opts || { mode: 'poc3' }
+  opts = opts || { mode: 'poc2' }
   if (opts.mode === 'poc2') {
     return swarmHash
   } else {
@@ -100,5 +101,7 @@ module.exports = function (opts) {
   }
 }
 
-
+// Swarm hash: 09ae927d0f3aaa37324df178928d3826820f3dd3388ce4aaebfc3af410bde23a
 console.log('pyramid', pyramidHash(Buffer.alloc(4096)).toString('hex'))
+// Swarm hash: 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
+//console.log('pyramid', pyramidHash(Buffer.from('hello world')).toString('hex'))
