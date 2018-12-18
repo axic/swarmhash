@@ -1,3 +1,4 @@
+const assert = require('assert')
 const Buffer = require('safe-buffer').Buffer
 const Keccak = require('keccakjs')
 
@@ -12,6 +13,8 @@ function swarmHashBlock (data, totalLength) {
 }
 
 function swarmHash (data) {
+  assert(Buffer.isBuffer(data))
+
   const length = data.length
 
   if (length <= 4096) {
