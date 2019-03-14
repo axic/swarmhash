@@ -91,6 +91,9 @@ function bmtHash (data) {
   return bmtHashSection(data, sectionLength)
 }
 
+function pyramidHash (data) {
+}
+
 module.exports = function (opts) {
   opts = opts || { mode: 'poc2' }
   if (opts.mode === 'poc2') {
