@@ -14,6 +14,8 @@ function swarmHashBlock (data, totalLength) {
 }
 
 function swarmHash (data) {
+  assert(Buffer.isBuffer(data))
+
   const length = data.length
 
   if (length <= 4096) {
@@ -55,13 +57,20 @@ function bmtHashSection (data, sectionLength) {
 
   var hash = new Keccak(256)
   hash.update(section)
-  return Buffer.from(hash.digest('bin'), 'binary')
+  let ret = Buffer.from(hash.digest('hex'), 'hex')
+  console.log('->Hash', ret.toString('hex'))
+  return ret
 }
 
 // NOTE: this is currently hardcoded to use keccak256
 function bmtHash (data) {
+//    maxDataLength int       // c * hashSize, where c = 2 ^ ceil(log2(count)), where count = ceil(length / hashSize)
+
+
+  assert(Buffer.isBuffer(data))
+
   // Set up hashing parameters.
-  const chunkSize = 32 //4096
+  const chunkSize = data.length //4096
   const hashSize = 32 // 256-bit
   const segmentCount = Math.ceil(chunkSize / hashSize)
   const sectionLength = 2 * hashSize
@@ -71,7 +80,6 @@ function bmtHash (data) {
 
   console.log('chunkSize', chunkSize, 'segmentCount', segmentCount, 'hashSize', hashSize, 'sectionLength', sectionLength, 'maxDataLength', maxDataLength)
 
-  assert(Buffer.isBuffer(data))
 
   // Need to zero pad if data is too short.
   if (data.length < maxDataLength) {
@@ -86,9 +94,10 @@ function bmtHash (data) {
     data = data.slice(0, maxDataLength)
   }
   
+  console.log(data.toString('hex'))
   console.log(data.length)
 
-  return bmtHashSection(data, sectionLength)
+  return bmtHashSection(data, maxDataLength)
 }
 
 function pyramidHash (data) {
@@ -105,6 +114,9 @@ module.exports = function (opts) {
 }
 
 // Swarm hash: 09ae927d0f3aaa37324df178928d3826820f3dd3388ce4aaebfc3af410bde23a
-console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
+//console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
 // Swarm hash: 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
-//console.log('pyramid', bmtHash(Buffer.from('hello world')).toString('hex'))
+console.log('pyramid', bmtHash(Buffer.from('hello world\n')).toString('hex'))
+
+//"hello world"
+//92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
