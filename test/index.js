@@ -23,3 +23,13 @@ for (var i = 0; i < blobs.length; i++) {
     t.equal(swarmhash(Buffer.alloc(blob[0])).toString('hex'), blob[1])
   })
 }
+
+tape('swmarhash() cannot take numbers', function (t) {
+  t.plan(1)
+  t.throws(function () { swarmhash(1) })
+})
+
+tape('swmarhash() cannot take strings', function (t) {
+  t.plan(1)
+  t.throws(function () { swarmhash('test') })
+})
