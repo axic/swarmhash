@@ -66,11 +66,10 @@ function bmtHashSection (data, sectionLength) {
 function bmtHash (data) {
 //    maxDataLength int       // c * hashSize, where c = 2 ^ ceil(log2(count)), where count = ceil(length / hashSize)
 
-
   assert(Buffer.isBuffer(data))
 
   // Set up hashing parameters.
-  const chunkSize = data.length //4096
+  const chunkSize = data.length // 4096
   const hashSize = 32 // 256-bit
   const segmentCount = Math.ceil(chunkSize / hashSize)
   const sectionLength = 2 * hashSize
@@ -79,7 +78,6 @@ function bmtHash (data) {
   maxDataLength *= hashSize
 
   console.log('chunkSize', chunkSize, 'segmentCount', segmentCount, 'hashSize', hashSize, 'sectionLength', sectionLength, 'maxDataLength', maxDataLength)
-
 
   // Need to zero pad if data is too short.
   if (data.length < maxDataLength) {
@@ -93,14 +91,11 @@ function bmtHash (data) {
     console.log('Should truncate input...')
     data = data.slice(0, maxDataLength)
   }
-  
+
   console.log(data.toString('hex'))
   console.log(data.length)
 
   return bmtHashSection(data, maxDataLength)
-}
-
-function pyramidHash (data) {
 }
 
 module.exports = function (opts) {
@@ -114,9 +109,9 @@ module.exports = function (opts) {
 }
 
 // Swarm hash: 09ae927d0f3aaa37324df178928d3826820f3dd3388ce4aaebfc3af410bde23a
-//console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
+// console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
 // Swarm hash: 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
 console.log('pyramid', bmtHash(Buffer.from('hello world\n')).toString('hex'))
 
-//"hello world"
-//92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
+// "hello world"
+// 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
