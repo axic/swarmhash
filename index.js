@@ -85,6 +85,7 @@ function bmtHash (data) {
       data,
       Buffer.alloc(maxDataLength - data.length)
     ])
+    console.log('after padding', data.length)
   }
 
   if (data.length > maxDataLength) {
@@ -98,6 +99,33 @@ function bmtHash (data) {
   return bmtHashSection(data, maxDataLength)
 }
 
+function bmtHashInner (data, length) {
+  if (length < 4096) {
+    data = Buffer.concat([
+      data,
+      Buffer.alloc(4096 - data.length)
+    ])
+    console.log('after padding', data.length)
+  }
+  
+  return bmtHashSection(data, 64)
+}
+
+// NOTE: it only supports 48 bit lengths
+function bmtHash2 (data) {
+  assert(data.length <= 4096, 'larger than 4096 blocks are not supported')
+
+  const originalLength = data.length
+  data = bmtHashInner(data, data.length)
+
+  var hash = new Keccak(256)
+  var tmp = Buffer.alloc(8)
+  tmp.writeUIntLE(originalLength, 0, 6)
+  hash.update(tmp)
+  hash.update(data)
+  return Buffer.from(hash.digest('hex'), 'hex')
+}
+
 module.exports = function (opts) {
   opts = opts || { mode: 'poc2' }
   if (opts.mode === 'poc2') {
@@ -109,9 +137,11 @@ module.exports = function (opts) {
 }
 
 // Swarm hash: 09ae927d0f3aaa37324df178928d3826820f3dd3388ce4aaebfc3af410bde23a
-// console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
+//console.log('pyramid', bmtHash(Buffer.alloc(4096)).toString('hex'))
 // Swarm hash: 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
-console.log('pyramid', bmtHash(Buffer.from('hello world\n')).toString('hex'))
+//console.log('pyramid', bmtHash(Buffer.from('hello world')).toString('hex'))
+console.log('pyramid', bmtHash2(Buffer.from('hello world')).toString('hex'))
+//console.log('pyramid', swarmHashBlock(Buffer.from('hello world\n')).toString('hex'))
 
 // "hello world"
 // 92672a471f4419b255d7cb0cf313474a6f5856fb347c5ece85fb706d644b630f
