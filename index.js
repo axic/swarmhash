@@ -8,7 +8,7 @@ function swarmHashBlock (data, totalLength) {
   tmp.writeUIntLE(totalLength, 0, 6)
   hash.update(tmp)
   hash.update(data)
-  return Buffer.from(hash.digest('bin'), 'binary')
+  return Buffer.from(hash.digest('binary'), 'binary')
 }
 
 function swarmHash (data) {
